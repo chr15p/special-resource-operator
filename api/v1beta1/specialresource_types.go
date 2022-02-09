@@ -23,33 +23,44 @@ import (
 	helmerv1beta1 "github.com/openshift-psap/special-resource-operator/pkg/helmer/api/v1beta1"
 )
 
-// SpecialResourceImages is not used.
+// SpecialResourceImages
 type SpecialResourceImages struct {
+	// Name of the DriverContainer image containing artifacts
 	Name       string                 `json:"name"`
+	// Kind of hte DriverContainer image containing artifacts (e.g. ImageStreamTag)
 	Kind       string                 `json:"kind"`
+	// Namespace of the DriverContainer image containing artifacts
 	Namespace  string                 `json:"namespace"`
+	// Pullsecret required to retrieve the DriverContainer image containing artifacts
 	PullSecret string                 `json:"pullsecret,omitempty"`
 	Paths      []SpecialResourcePaths `json:"path"`
 }
 
-// SpecialResourceClaims is not used.
+// SpecialResourceClaims
 type SpecialResourceClaims struct {
+	// Name is the PVC name to mount
 	Name      string `json:"name"`
+	// MountPath is the location to mount the PV on
 	MountPath string `json:"mountPath"`
 }
 
-// SpecialResourcePaths is not used.
+// SpecialResourcePaths
 type SpecialResourcePaths struct {
+	// SourcePath gives the path to copy build artifacts from
 	SourcePath     string `json:"sourcePath"`
+	// DestinationDir gives the path to copy build artifacts to
 	DestinationDir string `json:"destinationDir"`
 }
 
-// SpecialResourceArtifacts is not used.
+// SpecialResourceArtifacts
 type SpecialResourceArtifacts struct {
+	// HostPath containing required build artifacts
 	// +kubebuilder:validation:Optional
 	HostPaths []SpecialResourcePaths `json:"hostPaths,omitempty"`
+	//Images describes a pre-built DriverContainer image contianing the needed artifacts
 	// +kubebuilder:validation:Optional
 	Images []SpecialResourceImages `json:"images,omitempty"`
+	// Claims describes a PVC containing required build artifacts
 	// +kubebuilder:validation:Optional
 	Claims []SpecialResourceClaims `json:"claims,omitempty"`
 }
@@ -66,22 +77,27 @@ type SpecialResourceConfiguration struct {
 	Value []string `json:"value"`
 }
 
-// SpecialResourceGit is not used.
+// SpecialResourceGit is the git repo to pull source from
 type SpecialResourceGit struct {
+	// Ref describes the refspec to pull (e.g. main)
 	Ref string `json:"ref"`
+	// Uri describes the uri of the git repo to pull from (e.g. http://github.com/my/repo.git)
 	Uri string `json:"uri"`
 }
 
-// SpecialResourceSource is not used.
+// SpecialResourceSource is the source to pull sourcecode from
 type SpecialResourceSource struct {
+	// Git describes the git repo to build the drivercontainer from
 	Git SpecialResourceGit `json:"git,omitempty"`
 }
 
-// SpecialResourceDriverContainer is not used.
+// SpecialResourceDriverContainer
 type SpecialResourceDriverContainer struct {
+	// Source describes the source to build the drivercontainer from
 	// +kubebuilder:validation:Optional
 	Source SpecialResourceSource `json:"source,omitempty"`
 
+	// Artifacts describes the location of any build artifacts required
 	// +kubebuilder:validation:Optional
 	Artifacts SpecialResourceArtifacts `json:"artifacts,omitempty"`
 }
@@ -113,7 +129,7 @@ type SpecialResourceSpec struct {
 	// +kubebuilder:validation:EmbeddedResource
 	Set unstructured.Unstructured `json:"set,omitempty"`
 
-	// DriverContainer is not used.
+	// DriverContainer describes how to build the driver-container
 	// +kubebuilder:validation:Optional
 	DriverContainer SpecialResourceDriverContainer `json:"driverContainer,omitempty"`
 
