@@ -88,6 +88,10 @@ func getRuntimeInformation(ctx context.Context, r *SpecialResourceReconciler) er
 	if err != nil {
 		return fmt.Errorf("failed to get nodes list during getRuntimeInformation: %w", err)
 	}
+	// a zero length nodelist does not return an error so needs to be checked for separately
+	if len(nodeList.Items) == 0 {
+		return fmt.Errorf("no nodes matched the supplied node selector: %v", r.specialresource.Spec.NodeSelector)
+	}
 
 	RunInfo.OperatingSystemMajor, RunInfo.OperatingSystemMajorMinor, RunInfo.OperatingSystemDecimal, err = r.Cluster.OperatingSystem(nodeList)
 	if err != nil {
